@@ -1,6 +1,10 @@
+import io
 from flask import Flask, request, send_file
 from flask_cors import CORS
-import os
+from PIL import Image
+
+from utils.strange import predict
+
 
 def create_app():
     app = Flask(__name__)
@@ -19,9 +23,20 @@ def create_app():
             return 'No selected file'
 
         if file:
-            save_path = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
-            tail = save_path.split('.')[-1]
-            file.save(save_path)
-            return send_file(save_path, mimetype=f'image/{tail}')
+            # Pass the uploaded image to the predict function
+            new_image_tensor = predict(file)
+
+            # Convert the tensor back to a numpy array
+            new_image_array = new_image_tensor.numpy()
+
+            # Convert the numpy array to a PIL image
+            new_image_pil = Image.fromarray(new_image_array.astype('uint8'))
+
+            # Create a BytesIO object to send the image as a response
+            new_image_stream = io.BytesIO()
+            new_image_pil.save(new_image_stream, format='JPEG')
+            new_image_stream.seek(0)
+
+            return send_file(new_image_stream, mimetype='image/jpeg')
 
     return app

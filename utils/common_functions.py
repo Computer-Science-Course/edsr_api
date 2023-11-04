@@ -1,8 +1,5 @@
-import os
 from pathlib import Path
 
-from PIL import Image
-import numpy as np
 import tensorflow as tf
 
 from models.EDSR import EDSRModel
@@ -14,19 +11,6 @@ def PSNR(super_resolution, high_resolution):
     psnr_value = tf.image.psnr(
         high_resolution, super_resolution, max_val=255)[0]
     return psnr_value
-
-
-def save_image(image_source, filename) -> None:
-    """
-    Saves unscaled Tensor Images.
-    Args:
-        image (Tensor): Image tensor
-        filename (str): Filename
-    """
-    if not os.path.exists(os.path.dirname(filename)):
-        os.makedirs(os.path.dirname(filename))
-    preds_pil = Image.fromarray(np.array(image_source, dtype=np.uint8))
-    preds_pil.save(filename)
 
 
 def find_model(glob_path: str) -> str:
