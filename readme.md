@@ -22,8 +22,5 @@ pip install -r requirements.txt
 
 4. Run the project
 ```bash
-python3 playground.py # Linux
-```
-```bash
-py playground.py # Windows
+flask run
 ```
