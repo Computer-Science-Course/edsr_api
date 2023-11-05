@@ -15,6 +15,8 @@ def create_app():
 
     @app.route('/upload', methods=['POST'])
     def upload_file():
+        model = request.form.get('model', '500_200')
+
         if 'file' not in request.files:
             return 'No file part'
 
@@ -24,7 +26,7 @@ def create_app():
 
         if file:
             # Pass the uploaded image to the predict function
-            new_image_tensor = predict(file)
+            new_image_tensor = predict(file, model)
 
             # Convert the tensor back to a numpy array
             new_image_array = new_image_tensor.numpy()

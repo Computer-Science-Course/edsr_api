@@ -6,12 +6,14 @@ from utils.common_functions import (
     find_model,
     load_edrs_model,
 )
+from utils.constants import models
 
 
-def predict(file):
+def predict(file, model):
     """ Predicts the image. """
+    model_glob_path = models.get(model)
     model = load_edrs_model(
-        find_model('**/*trained.h5')
+        find_model(model_glob_path)
     )
 
     image = Image.open(file)
